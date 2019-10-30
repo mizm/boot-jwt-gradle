@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.ildong.erpmonitor.api.mapper.db2.CrudMapper">
+	<select id="CreateItem" parameterType="String">
+        INSERT INTO SqlBoard(TITLE,QUERY,VARLIST,CREATED_ID,UPDATED_ID) VALUES(#{title},#{query},#{varlist},#{cid},#{cid})
+    </select>
+    
+    <select id="CreateTable">
+    CREATE TABLE if not exists SqlBoard
+		(
+		  no BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+		  title VARCHAR2(100) NOT NULL,
+		  query VARCHAR2(100000) NOT NULL,
+		  varlist VARCHAR2(3000) default '',
+		  created_id VARCHAR2(30) NOT NULL,
+		  updated_id VARCHAR2(30) NOT NULL,
+		  created_at DATETIME default now(),
+		  updated_at DATETIME DEFAULT NOW() ON UPDATE NOW()
+		);
+    </select>
+    <select id = "LastInsert" resultType ="int">
+    	select LAST_INSERT_ID()
+    </select>
+    <select id="GetAllItem" parameterType="String"
+		resultType="hashmap">
+	        SELECT * from SqlBoard
+	</select>
+	<select id = "DeleteItem" parameterType="String">
+		DELETE FROM SqlBoard WHERE NO=(#{no})
+	</select>
+	<select id = "GetDetailItem" parameterType="String" resultType="String">
+		Select QUERY FROM SqlBoard WHERE NO=(#{no})
+	</select>
+	
+	<select id = "UpdateItem" parameterType="String">
+		UPDATE SqlBoard SET title=(#{title}), query=(#{query}), varlist=(#{varlist}), updated_id=(#{cid}) WHERE NO=(#{no})
+	</select>
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.ildong.erpmonitor.api.mapper.db2.UserMapper">
+	
+    
+    <select id="CreateTable">
+    CREATE TABLE if not exists User
+		(
+		  id VARCHAR2(30) PRIMARY KEY NOT NULL,
+		  name VARCHAR2(10) default '',
+		  deptNm VARCHAR2(30) default '',
+		  jikchak VARCHAR2(20) default '',
+		  auth INT default 0,
+		  created_id VARCHAR2(30) default '',
+		  updated_id VARCHAR2(30) default '',
+		  created_at DATETIME default now(),
+		  updated_at DATETIME DEFAULT NOW() ON UPDATE NOW(),
+		  lasted_login DATETIME DEFAULT NOW() ON UPDATE NOW()
+		);
+    </select>
+    
+    <select id = "LastInsert" resultType ="int">
+    	select LAST_INSERT_ID()
+    </select>
+    
+    <select id="CreateItem" parameterType="String">
+        INSERT INTO User(id,created_id) VALUES (#{cid},#{aid})
+    </select>
+    <select id="GetAllItem" parameterType="String"
+		resultType="hashmap">
+	        SELECT * from User
+	</select>
+	<select id = "DeleteItem" parameterType="String">
+		DELETE FROM User WHERE ID=(#{aid})
+	</select>
+	<select id = "CheckUser" parameterType="String" resultType="int">
+		Select auth FROM User WHERE id=(#{id})
+	</select>
+	
+	<select id = "UpdateItem" parameterType="String">
+		UPDATE User SET name=(#{name}), deptNm=(#{deptNm}), jikchak=(#{jikchak}) WHERE id=(#{aid})
+	</select>
+	
+	<select id = "UpdateAuth" parameterType="String">
+		UPDATE USER SET auth = (#{auth}), updated_id = (#{cid}) WHERE id=(#{aid})
+	</select>
+</mapper>
